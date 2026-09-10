@@ -3,6 +3,8 @@ import json
 import sys
 from pathlib import Path
 
+import config as c
+
 
 def tokenise(data: str) -> list[str]:
 	data_iter = iter(data)
@@ -96,7 +98,7 @@ def main() -> None:
 	with open(output_path, "w") as f:
 		f.write("")
 
-	for i in range(3):
+	for i in range(c.MAX_N_GRAM):
 		with gzip.open(output_path, "ab") as f:
 			f.write(json.dumps(learn(tokens, i + 1)).encode("utf-8"))
 			f.write(b"\n")
