@@ -64,7 +64,7 @@ def main() -> None:
 
 	if len(sys.argv) != 3:
 		raise Exception(
-			f"Usage: {sys.executable} {sys.argv[0]} <training_file> <output_dir>"
+			f"Usage: {sys.executable} {sys.argv[0]} <training_path> <output_path>"
 		)
 
 	# Training file path
@@ -79,11 +79,17 @@ def main() -> None:
 	# Output json path
 	output_path = Path(sys.argv[2])
 
+	print(f"Reading from {training_path}...")
+
 	# Read training data from file
 	with open(training_path, "r") as f:
 		training_data = f.read()
 
+	print("Tokenising...")
+
 	tokens = tokenise(training_data)
+
+	print("Writing model...")
 
 	# Clear output file before appending
 	with open(output_path, "w") as f:
@@ -93,6 +99,8 @@ def main() -> None:
 		with gzip.open(output_path, "ab") as f:
 			f.write(json.dumps(learn(tokens, i + 1)).encode("utf-8"))
 			f.write(b"\n")
+
+	print(f"Successfully created new model at {output_path}")
 
 
 if __name__ == "__main__":
