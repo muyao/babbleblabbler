@@ -64,7 +64,8 @@ def main() -> None:
 
 	if len(sys.argv) != 3:
 		raise Exception(
-			f"Usage: {sys.executable} {sys.argv[0]} <training_path> <output_path>"
+			"Usage: "
+			f"{sys.executable} {sys.argv[0]} <training_path> <output_path>"
 		)
 
 	# Training file path
