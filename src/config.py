@@ -1,0 +1,1 @@
+MAX_N_GRAM = 3
