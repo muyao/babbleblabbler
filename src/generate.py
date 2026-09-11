@@ -4,18 +4,16 @@ import random
 import sys
 from pathlib import Path
 
-import config as c
 
-
-def next_token(model: list[dict], prev_tokens: list[str]) -> str:
+def next_token(model: list[dict], prev_tokens: list[str], max_ngram) -> str:
 
 	next_token = random.choice(list(model[0].keys()))
 	k = " ".join(prev_tokens)
 
 	# Try through all n grams
-	for i in range(c.MAX_N_GRAM):
+	for i in range(max_ngram):
 
-		n_g = c.MAX_N_GRAM - i - 1
+		n_g = max_ngram - i - 1
 
 		all_nexts = model[n_g]
 
@@ -59,6 +57,8 @@ def main() -> None:
 	# Jsonify
 	model: list[dict] = [json.loads(line) for line in model_bytes]
 
+	max_ngram = len(model)
+
 	token: str = random.choice(list(model[0].keys()))
 
 	prev_tokens = []
@@ -67,7 +67,7 @@ def main() -> None:
 	for i in range(num_tokens):
 		# Previous tokens
 		prev_tokens.append(token)
-		if len(prev_tokens) > c.MAX_N_GRAM:
+		if len(prev_tokens) > max_ngram:
 			del prev_tokens[0]
 
 		# When to insert a space
@@ -76,7 +76,7 @@ def main() -> None:
 
 		print(token, end="")
 
-		token = next_token(model, prev_tokens)
+		token = next_token(model, prev_tokens, max_ngram)
 
 
 if __name__ == "__main__":

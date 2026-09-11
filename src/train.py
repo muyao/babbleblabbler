@@ -3,8 +3,6 @@ import json
 import sys
 from pathlib import Path
 
-import config as c
-
 
 def tokenise(data: str) -> list[str]:
 	data_iter = iter(data)
@@ -64,10 +62,11 @@ def learn(tokens: list[str], ctxln: int) -> dict:
 
 def main() -> None:
 
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 4:
 		raise Exception(
 			"Usage: "
-			f"{sys.executable} {sys.argv[0]} <training_path> <output_path>"
+			f"{sys.executable} {sys.argv[0]} <training_path> <output_path> <max"
+			"_ngram>"
 		)
 
 	# Training file path
@@ -98,7 +97,7 @@ def main() -> None:
 	with open(output_path, "w") as f:
 		f.write("")
 
-	for i in range(c.MAX_N_GRAM):
+	for i in range(int(sys.argv[3])):
 		with gzip.open(output_path, "ab") as f:
 			f.write(json.dumps(learn(tokens, i + 1)).encode("utf-8"))
 			f.write(b"\n")
